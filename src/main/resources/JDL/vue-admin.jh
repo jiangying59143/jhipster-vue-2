@@ -1,0 +1,68 @@
+entity AuthAdmin {
+	username String,
+    password String,
+    tel String,
+    email String,
+    avatar String,
+    sex Integer,
+    lastLoginIp String,
+    lastLoginTime Instant,
+    createTime Instant,
+    status Integer
+}
+
+entity AuthPermission {
+	type String
+}
+
+entity AuthPermissionRule {
+	name String,
+	title String,
+	condition String,
+	status Integer,
+    listorder Integer,
+    createTime Instant,
+    updateTime Instant
+}
+
+entity AuthRole {
+	name String,
+	remark String,
+	status Integer,
+    listorder Integer,
+    createTime Instant,
+    updateTime Instant
+}
+
+
+relationship OneToOne {
+	AuthPermission{AuthRole} to AuthRole
+    AuthPermission{AuthPermissionRule} to AuthPermissionRule
+}
+
+relationship OneToOne {
+	AuthPermissionRule{AuthPermissionRule} to AuthPermissionRule
+}
+
+relationship OneToOne {
+	AuthRole{AuthRole} to AuthRole
+}
+
+relationship ManyToMany {
+	AuthAdmin{AuthRole(name)} to AuthRole{AuthAdmin(username)}
+}
+
+
+
+// Set pagination options
+paginate AuthAdmin, AuthRole, AuthPermissionRule with infinite-scroll
+paginate AuthAdmin with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
